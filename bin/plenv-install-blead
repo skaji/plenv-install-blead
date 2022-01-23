@@ -149,6 +149,7 @@ main() {
   fi
 
   local build_dir=$root/build/blead-$(date +%Y%m%d-%H%M%S)
+  run git -C $perl_repository fetch -q
   run git clone -q --reference $perl_repository https://github.com/Perl/perl5 $build_dir
 
   cd $build_dir
