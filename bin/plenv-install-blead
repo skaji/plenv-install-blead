@@ -16,6 +16,20 @@ run() {
   "$@"
 }
 
+run_with_log() {
+  local log=$1
+  shift
+  info "$@"
+  set +e
+  (
+    exec >>$log 2>&1
+    "$@"
+  )
+  local ret=$?
+  set -e
+  return $ret
+}
+
 show_help() {
   echo 'Usage: plenv install-blead [options] [commitish]
 
@@ -32,8 +46,7 @@ Options:
 
 Usage:
  plenv install-blead HEAD
- plenv install-blead -Duseithreads -Duseshrplib --as blead-thread-$(date +%Y%m%d-%H%M%S) maint-5.30
-'
+ plenv install-blead -Duseithreads -Duseshrplib --as blead-thread-$(date +%Y%m%d-%H%M%S) maint-5.30'
 }
 
 main() {
@@ -137,11 +150,14 @@ main() {
 
   local build_dir=$root/build/blead-$(date +%Y%m%d-%H%M%S)
   run git clone -q --reference $perl_repository https://github.com/Perl/perl5 $build_dir
-  run git -C $build_dir checkout -q $commitish
+
+  cd $build_dir
+
+  run git checkout -q $commitish
 
   local as=$option_as
   if [[ -z $as ]]; then
-    as=blead-$(git -C $build_dir describe --tags --dirty)
+    as=blead-$(git describe --tags --dirty)
   fi
   local prefix=$root/versions/$as
   if [[ -e $prefix ]]; then
@@ -157,25 +173,23 @@ main() {
   local build_log=$build_dir.log
   info "Configure/build/install perl, see $build_log"
 
-  info ./Configure "${configure_options[@]}"
-  (
-    exec >>$build_log 2>&1
-    cd $build_dir
-    ./Configure "${configure_options[@]}"
-  )
+  if ! run_with_log $build_log ./Configure "${configure_options[@]}"; then
+    die "Failed, see $build_log"
+  fi
 
   local job=8
   if [[ -n $option_jobs ]]; then
     job=$option_jobs
   fi
-  info make -j$job install
-  (
-    exec >>$build_log 2>&1
-    cd $build_dir
-    make -j$job install
-  )
-  info "Successfully install perl into $prefix"
-  info "You may want to execute: plenv global $as"
+  if ! run_with_log $build_log make -j$job install; then
+    die "Failed, see $build_log"
+  fi
+  if [[ -e $prefix/bin/perl ]]; then
+    info "Successfully install perl into $prefix"
+    info "You may want to execute: plenv global $as"
+  else
+    die "Failed, see $build_log"
+  fi
 }
 
 main "$@"
