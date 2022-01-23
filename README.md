@@ -23,10 +23,10 @@ Then:
 
 ```console
 ❯ plenv install-blead HEAD
----> git clone -q --reference /Users/skaji/src/github.com/Perl/perl5 https://github.com/Perl/perl5 /Users/skaji/env/plenv/build/blead-20220123-133537
----> git -C /Users/skaji/env/plenv/build/blead-20220123-133537 checkout -q HEAD
+---> git clone -q --reference /Users/skaji/src/github.com/Perl/perl5 https://github.com/Perl/perl5 /Users/skaji/env/plenv/build/blead-20220123-145204
+---> git checkout -q HEAD
 ---> Using prefix /Users/skaji/env/plenv/versions/blead-v5.35.8-7-g8030c9e253
----> Configure/build/install perl, see /Users/skaji/env/plenv/build/blead-20220123-133537.log
+---> Configure/build/install perl, see /Users/skaji/env/plenv/build/blead-20220123-145204.log
 ---> ./Configure -des -Dman1dir=none -Dman3dir=none -Dusedevel -Uversiononly -Dprefix=/Users/skaji/env/plenv/versions/blead-v5.35.8-7-g8030c9e253 -Dscriptdir=/Users/skaji/env/plenv/versions/blead-v5.35.8-7-g8030c9e253/bin
 ---> make -j8 install
 ---> Successfully install perl into /Users/skaji/env/plenv/versions/blead-v5.35.8-7-g8030c9e253
