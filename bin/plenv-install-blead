@@ -44,9 +44,9 @@ Options:
      --as          install name, default: blead-$(git describe --tags --dirty)
  -h, --help        show this help
 
-Usage:
- plenv install-blead HEAD
- plenv install-blead -Duseithreads -Duseshrplib --as blead-thread-$(date +%Y%m%d-%H%M%S) maint-5.30'
+Examples:
+ $ plenv install-blead HEAD
+ $ plenv install-blead -Duseithreads -Duseshrplib --as blead-thread-$(date +%Y%m%d-%H%M%S) maint-5.30'
 }
 
 main() {
@@ -124,7 +124,7 @@ main() {
   fi
 
   if [[ "${#argv[@]}" -eq 0 ]]; then
-    die "Need commitish argument, you may want to try: plenv install-blead HEAD"
+    die "Need commitish argument, try: plenv install-blead --help"
   fi
   commitish=${argv[0]}
 
@@ -134,10 +134,10 @@ main() {
   if [[ -n ${PLENV_INSTALL_BLEAD_REPOSITORY-} ]]; then
     perl_repository=$PLENV_INSTALL_BLEAD_REPOSITORY
   else
-    if [[ -n $GOPATH ]] && [[ -d $GOPATH/src/github.com/Perl/perl5 ]]; then
+    if [[ -n ${GOPATH-} ]] && [[ -d $GOPATH/src/github.com/Perl/perl5 ]]; then
       perl_repository=$GOPATH/src/github.com/Perl/perl5
     else
-      die "Need to set PLENV_INSTALL_BLEAD_REPOSITORY"
+      die "Need to set PLENV_INSTALL_BLEAD_REPOSITORY, try: plenv install-blead --help"
     fi
   fi
 
