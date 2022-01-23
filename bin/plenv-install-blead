@@ -36,7 +36,7 @@ show_help() {
 Install perl from perl source repository
 
 **NOTE** You need to clone https://github.com/Perl/perl5 first,
-and set PLENV_BLEAD_INSTALL_REPOSITORY
+and set PLENV_INSTALL_BLEAD_REPOSITORY
 
 Options:
  -D, -U, -A        perl configure options
@@ -131,13 +131,13 @@ main() {
   local root=${PLENV_ROOT-$HOME/.plenv}
 
   local perl_repository=
-  if [[ -n ${PLENV_BLEAD_INSTALL_REPOSITORY-} ]]; then
-    perl_repository=$PLENV_BLEAD_INSTALL_REPOSITORY
+  if [[ -n ${PLENV_INSTALL_BLEAD_REPOSITORY-} ]]; then
+    perl_repository=$PLENV_INSTALL_BLEAD_REPOSITORY
   else
     if [[ -n $GOPATH ]] && [[ -d $GOPATH/src/github.com/Perl/perl5 ]]; then
       perl_repository=$GOPATH/src/github.com/Perl/perl5
     else
-      die "Need to set PLENV_BLEAD_INSTALL_REPOSITORY"
+      die "Need to set PLENV_INSTALL_BLEAD_REPOSITORY"
     fi
   fi
 

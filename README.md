@@ -12,11 +12,11 @@ that helps you install perl from the perl source repository https://github.com/P
 # Usage
 
 First you need to clone https://github.com/Perl/perl5 into a direcotory,
-and set the directory to `PLENV_BLEAD_INSTALL_REPOSITORY`:
+and set the directory to `PLENV_INSTALL_BLEAD_REPOSITORY`:
 
 ```console
 ❯ git clone https://github.com/Perl/perl5 $HOME/.perl-source
-❯ export PLENV_BLEAD_INSTALL_REPOSITORY=$HOME/.perl-source
+❯ export PLENV_INSTALL_BLEAD_REPOSITORY=$HOME/.perl-source
 ```
 
 Then:
