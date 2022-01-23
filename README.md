@@ -6,17 +6,17 @@ that helps you install perl from the perl source repository https://github.com/P
 # Install this plugin
 
 ```console
-❯ git clone https://github.com/skaji/plenv-install-blead $(plenv root)/plugins/plenv-install-blead
+git clone https://github.com/skaji/plenv-install-blead $(plenv root)/plugins/plenv-install-blead
 ```
 
 # Usage
 
-First you need to clone https://github.com/Perl/perl5 into a direcotory,
+First you need to clone https://github.com/Perl/perl5 into a local direcotory,
 and set the directory to `PLENV_INSTALL_BLEAD_REPOSITORY`:
 
 ```console
-❯ git clone https://github.com/Perl/perl5 $HOME/.perl-source
-❯ export PLENV_INSTALL_BLEAD_REPOSITORY=$HOME/.perl-source
+git clone https://github.com/Perl/perl5 $HOME/.perl-source
+export PLENV_INSTALL_BLEAD_REPOSITORY=$HOME/.perl-source
 ```
 
 Then:
