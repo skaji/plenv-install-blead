@@ -35,13 +35,15 @@ show_help() {
 
 Install perl from perl source repository
 
-**NOTE** You need to clone https://github.com/Perl/perl5 first,
-and set PLENV_INSTALL_BLEAD_REPOSITORY
+** NOTE **
+You need to clone https://github.com/Perl/perl5 to a local directory first,
+and set the directory to --reference or PLENV_INSTALL_BLEAD_REPOSITORY environment variable
 
 Options:
  -D, -U, -A        perl configure options
  -j, --jobs        pass -jN to `make install`, default: -j8
      --as          install name, default: blead-$(git describe --tags --dirty)
+     --reference   local perl5 repository
  -h, --help        show this help
 
 Examples:
@@ -54,6 +56,7 @@ main() {
   local option_as=
   local option_jobs=
   local option_help=
+  local option_reference=
   local argv=()
   local _argv=("$@")
   local _v
@@ -77,6 +80,20 @@ main() {
         _argv=("${_argv[@]:2}")
       fi
       option_as="$_v"
+      ;;
+    --reference | --reference=*)
+      if [[ ${_argv[0]} =~ ^--reference= ]]; then
+        _v="${_argv[0]##--reference=}"
+        _argv=("${_argv[@]:1}")
+      else
+        if [[ ${#_argv[@]} -eq 1 ]] || [[ ${_argv[1]} =~ ^- ]]; then
+          echo "${_argv[0]} option requires an argument" >&2
+          return 1
+        fi
+        _v="${_argv[1]}"
+        _argv=("${_argv[@]:2}")
+      fi
+      option_reference="$_v"
       ;;
     --jobs | -j | --jobs=* | -j=*)
       if [[ ${_argv[0]} =~ ^--jobs= ]]; then
@@ -131,14 +148,12 @@ main() {
   local root=${PLENV_ROOT-$HOME/.plenv}
 
   local perl_repository=
-  if [[ -n ${PLENV_INSTALL_BLEAD_REPOSITORY-} ]]; then
+  if [[ -n $option_reference ]]; then
+    perl_repository=$option_reference
+  elif [[ -n ${PLENV_INSTALL_BLEAD_REPOSITORY-} ]]; then
     perl_repository=$PLENV_INSTALL_BLEAD_REPOSITORY
   else
-    if [[ -n ${GOPATH-} ]] && [[ -d $GOPATH/src/github.com/Perl/perl5 ]]; then
-      perl_repository=$GOPATH/src/github.com/Perl/perl5
-    else
-      die "Need to set PLENV_INSTALL_BLEAD_REPOSITORY, try: plenv install-blead --help"
-    fi
+    die "Need to set --reference or PLENV_INSTALL_BLEAD_REPOSITORY, try: plenv install-blead --help"
   fi
 
   if [[ ! -d $root/build ]]; then
